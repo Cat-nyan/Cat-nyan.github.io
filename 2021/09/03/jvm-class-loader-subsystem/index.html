@@ -5,13 +5,13 @@
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="概述       当编译完java程序后，如果你足够细心，会发现在某个特定的文件夹里总能发现以.class结尾的文件，也称之为字节码文件，而这正是用来储存中间代码的容器，这里面描述了类和接口的各种信息，只有当字节码文件加载到虚拟机后才能够运行和使用，这个过程由类加载子系统来完成，大致流程如下：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:/blog/source_posts/jvm-class-loader-subsystem/2021-9-3-1.jpg">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/09/03/jvm-class-loader-subsystem/2021-9-3-1.jpg">
 <meta property="article:published_time" content="2021-09-03T06:50:54.000Z">
-<meta property="article:modified_time" content="2021-09-03T14:28:30.410Z">
+<meta property="article:modified_time" content="2021-09-03T15:10:13.965Z">
 <meta property="article:author" content="Cat-nyan">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:/blog/source_posts/jvm-class-loader-subsystem/2021-9-3-1.jpg"><title>JVM-类加载子系统 | Blog</title><link ref="canonical" href="https://cat-nyan.github.io/2021/09/03/jvm-class-loader-subsystem/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+<meta name="twitter:image" content="https://cat-nyan.github.io/2021/09/03/jvm-class-loader-subsystem/2021-9-3-1.jpg"><title>JVM-类加载子系统 | Blog</title><link ref="canonical" href="https://cat-nyan.github.io/2021/09/03/jvm-class-loader-subsystem/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
 var CONFIG = {
   root: '/',
   algolia: undefined,
@@ -41,7 +41,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       <p>当编译完java程序后，如果你足够细心，会发现在某个特定的文件夹里总能发现以<code>.class</code>结尾的文件，也称之为字节码文件，而这正是用来储存中间代码的容器，这里面描述了类和接口的各种信息，只有当字节码文件加载到虚拟机后才能够运行和使用，这个过程由类加载子系统来完成，大致流程如下：</p>
 <span id="more"></span>
 
-<p><img src="D:\blog\source_posts\jvm-class-loader-subsystem\2021-9-3-1.jpg" alt="2021-9-3-1"></p>
+<p><img src="2021-9-3-1.jpg" alt="2021-9-3-1"></p>
 
         <h2 id="Loading-加载"   >
           <a href="#Loading-加载" class="heading-link"><i class="fas fa-link"></i></a><a href="#Loading-加载" class="headerlink" title="Loading-加载"></a>Loading-加载</h2>
