@@ -9,7 +9,7 @@
 <meta property="og:image" content="https://cat-nyan.github.io/2021/09/03/jvm-class-loader-subsystem/2021-9-3-2.jpg">
 <meta property="og:image" content="https://cat-nyan.github.io/2021/09/03/jvm-class-loader-subsystem/2021-9-4-1.jpg">
 <meta property="article:published_time" content="2021-09-03T06:50:54.000Z">
-<meta property="article:modified_time" content="2021-09-04T06:14:45.508Z">
+<meta property="article:modified_time" content="2021-09-04T06:19:43.702Z">
 <meta property="article:author" content="Cat-nyan">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -165,14 +165,14 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>从Java虚拟机的角度来讲，只存在两种不同的类加载器:一种是启动类加载器( Bootstrap ClassLoader)，这个类加载器使用C++语言实现，是虚拟机自身的一部分;另一种就是所有其他的类加载器，这些类加载器都由Java语言实现，独立于虚拟机外部，并且全都继承自抽象类java.lang.ClassLader</p>
 <p><strong>启动类加载器</strong>(BootstrapClassLoader)：负责将 <JAVA_HOME>\lib下面的类库加载到内存中（比如rt.jar）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作</p>
 <p><strong>扩展类加载器</strong>(ExtClassLoader ,JDK 1.9 之后，改名为 PlatformClassLoader)：是由 Sun 的 ExtClassLoader（sun.misc.Launcher$ExtClassLoader）实现的。它负责将Java_Home /lib/ext或者由系统变量 java.ext.dir指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器</p>
-<p><strong>应用程序类加载器</strong>(APPClassLoader)：是由 Sun 的 AppClassLoader（sun.misc.Launcher$AppClassLoader）实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用系统类加载器。由于这个类加载器是ClassLoader中的getSystemClassLoader()方法的返回值，因此一般称为系统（System）类加载器</p>
-<p>在JDK16中，可以输入以下代码，查看这些类加载器的实现类：</p>
+<p><strong>应用程序类加载器</strong>(AppClassLoader)：是由 Sun 的 AppClassLoader（sun.misc.Launcher$AppClassLoader）实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用系统类加载器。由于这个类加载器是ClassLoader中的getSystemClassLoader()方法的返回值，因此一般称为系统（System）类加载器</p>
+<p>在JDK16中，可以输入以下代码，查看以上这些类加载器的实现类：</p>
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ClassLoader appClassLoader = ClassLoader.getSystemClassLoader();</span><br><span class="line">    System.out.println(appClassLoader);</span><br><span class="line">    ClassLoader extClassLoader = appClassLoader.getParent();</span><br><span class="line">    System.out.println(extClassLoader);</span><br><span class="line">    ClassLoader bootstrapClassLoader = extClassLoader.getParent();</span><br><span class="line">    System.out.println(bootstrapClassLoader);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
 
 <p>结果：</p>
 <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdk.internal.loader.ClassLoaders$AppClassLoader@66d3c617</span><br><span class="line">jdk.internal.loader.ClassLoaders$PlatformClassLoader@1e9e725a</span><br><span class="line">null</span><br></pre></td></tr></table></div></figure>
 
-<p>启动类加载器的结果为<strong>null</strong>证明其使用了C++语言实现</p>
+<p>启动类加载器的结果为<strong>null</strong>是因为其使用了C++语言实现</p>
 
         <h3 id="加载器之间的关系——双亲委派模型"   >
           <a href="#加载器之间的关系——双亲委派模型" class="heading-link"><i class="fas fa-link"></i></a><a href="#加载器之间的关系——双亲委派模型" class="headerlink" title="加载器之间的关系——双亲委派模型"></a>加载器之间的关系——双亲委派模型</h3>
