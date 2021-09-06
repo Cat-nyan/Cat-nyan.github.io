@@ -53,7 +53,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
       <p>在创建项目时添加以下依赖项：</p>
 <span id="more"></span>
 
-<p><img src="image-20210823204505806.png" alt="image-20210823204505806"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823204505806.png"  alt="image-20210823204505806">
+      </p>
 
         <h2 id="添加依赖项"   >
           <a href="#添加依赖项" class="heading-link"><i class="fas fa-link"></i></a><a href="#添加依赖项" class="headerlink" title="添加依赖项"></a>添加依赖项</h2>
@@ -65,7 +68,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="向MySQL中添加数据"   >
           <a href="#向MySQL中添加数据" class="heading-link"><i class="fas fa-link"></i></a><a href="#向MySQL中添加数据" class="headerlink" title="向MySQL中添加数据"></a>向MySQL中添加数据</h2>
       <p>项目中用到的具体数据数据如下图所示，为了减少项目复杂性，把用户、角色、权限全部整合到了user表上：</p>
-<p><img src="image-20210823210913360.png" alt="image-20210823210913360"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823210913360.png"  alt="image-20210823210913360">
+      </p>
 <p><strong>生成该表的user.sql文件内容</strong></p>
 <figure class="highlight sql"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- Host: 127.0.0.1    Database: mybatis</span></span><br><span class="line"><span class="comment">-- ------------------------------------------------------</span></span><br><span class="line"><span class="comment">-- Server version	8.0.18</span></span><br><span class="line"><span class="comment">/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */</span>;</span><br><span class="line"><span class="comment">/*!50503 SET NAMES utf8mb4 */</span>;</span><br><span class="line"><span class="comment">/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */</span>;</span><br><span class="line"><span class="comment">/*!40103 SET TIME_ZONE=&#x27;+00:00&#x27; */</span>;</span><br><span class="line"><span class="comment">/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */</span>;</span><br><span class="line"><span class="comment">/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=&#x27;NO_AUTO_VALUE_ON_ZERO&#x27; */</span>;</span><br><span class="line"><span class="comment">/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- Table structure for table `user`</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> `<span class="keyword">user</span>`;</span><br><span class="line"><span class="comment">/*!40101 SET @saved_cs_client     = @@character_set_client */</span>;</span><br><span class="line"><span class="comment">/*!50503 SET character_set_client = utf8mb4 */</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `<span class="keyword">user</span>` (</span><br><span class="line">                        `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">                        `username` <span class="type">varchar</span>(<span class="number">40</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">                        `password` <span class="type">varchar</span>(<span class="number">40</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">                        `perms` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">                        `role` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span></span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci;</span><br><span class="line"><span class="comment">/*!40101 SET character_set_client = @saved_cs_client */</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- Dumping data for table `user`</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line">LOCK TABLES `<span class="keyword">user</span>` WRITE;</span><br><span class="line"><span class="comment">/*!40000 ALTER TABLE `user` DISABLE KEYS */</span>;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `<span class="keyword">user</span>` (`id`, `username`, `password`, `perms`, `role`) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;zs&#x27;</span>,<span class="string">&#x27;123123&#x27;</span>,<span class="keyword">NULL</span>,<span class="keyword">NULL</span>),(<span class="number">2</span>,<span class="string">&#x27;ls&#x27;</span>,<span class="string">&#x27;123123&#x27;</span>,<span class="string">&#x27;manage&#x27;</span>,<span class="keyword">NULL</span>),(<span class="number">3</span>,<span class="string">&#x27;ww&#x27;</span>,<span class="string">&#x27;123123&#x27;</span>,<span class="string">&#x27;manage&#x27;</span>,<span class="string">&#x27;admin&#x27;</span>);</span><br><span class="line"><span class="comment">/*!40000 ALTER TABLE `user` ENABLE KEYS */</span>;</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"><span class="comment">/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*!40101 SET SQL_MODE=@OLD_SQL_MODE */</span>;</span><br><span class="line"><span class="comment">/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */</span>;</span><br><span class="line"><span class="comment">/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */</span>;</span><br><span class="line"><span class="comment">/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Dump completed on 2021-08-23 20:57:12</span></span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
 
@@ -75,7 +81,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
         <h2 id="项目总体结构"   >
           <a href="#项目总体结构" class="heading-link"><i class="fas fa-link"></i></a><a href="#项目总体结构" class="headerlink" title="项目总体结构"></a>项目总体结构</h2>
       <p>项目结构如下图所示，可按需求自行调整</p>
-<p><img src="image-20210823211858140.png" alt="image-20210823211858140"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823211858140.png"  alt="image-20210823211858140">
+      </p>
 
         <h2 id="编写实体类-User"   >
           <a href="#编写实体类-User" class="heading-link"><i class="fas fa-link"></i></a><a href="#编写实体类-User" class="headerlink" title="编写实体类-User"></a>编写实体类-User</h2>
@@ -116,9 +125,15 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <figure class="highlight java"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.catnyan.entity.User;</span><br><span class="line"><span class="keyword">import</span> com.catnyan.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.catnyan.service.UserService;</span><br><span class="line"><span class="keyword">import</span> org.junit.jupiter.api.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.test.context.SpringBootTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoApplicationTests</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">mapper</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;User&gt; users = userMapper.selectList(<span class="keyword">null</span>);</span><br><span class="line">        users.forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = userService.findByUsername(<span class="string">&quot;zs&quot;</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
 
 <p><strong>UserMapper接口预期结果</strong></p>
-<p><img src="image-20210823214839427.png" alt="image-20210823214839427"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823214839427.png"  alt="image-20210823214839427">
+      </p>
 <p><strong>UserService接口预期结果</strong></p>
-<p><img src="image-20210823215002310.png" alt="image-20210823215002310"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823215002310.png"  alt="image-20210823215002310">
+      </p>
 <blockquote>
 <p>如果以上预取结果全部实现，则可继续剩余流程，否则请检查代码是否正确</p>
 </blockquote>
@@ -193,23 +208,47 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           <a href="#开始测试" class="heading-link"><i class="fas fa-link"></i></a><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h2>
       <p>上述准备工作全部完成后，就可以开始测试<strong>Shiro</strong>是否能正常工作了。</p>
 <p><strong>启动项目</strong></p>
-<p><img src="image-20210823223435051.png" alt="image-20210823223435051"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823223435051.png"  alt="image-20210823223435051">
+      </p>
 <p><strong>进入主界面</strong></p>
 <p>当项目启动成功后，在浏览器中输入<code>localhost:8080</code>,进入主界面如下图所示</p>
-<p><img src="image-20210823223636842.png" alt="image-20210823223636842"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823223636842.png"  alt="image-20210823223636842">
+      </p>
 <p><strong>未登录状态</strong></p>
 <p>此时你处于未登录状态，点击任意一个连接，都会被重定向到<code>login</code>页面，用户名或密码错误都会抛出异常并将提示信息展示到页面上，只有登录成功后才具有访问某些页面的权限，</p>
-<p><img src="image-20210823224020653.png" alt="image-20210823224020653"></p>
-<p><img src="image-20210823224244327.png" alt="image-20210823224244327"></p>
-<p><img src="image-20210823224529880.png" alt="image-20210823224529880"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823224020653.png"  alt="image-20210823224020653">
+      </p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823224244327.png"  alt="image-20210823224244327">
+      </p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823224529880.png"  alt="image-20210823224529880">
+      </p>
 <p><strong>登录状态</strong></p>
 <p>登录成功后将会返回至<code>index</code>页面，并且登录的用户信息也会显示出来</p>
-<p><img src="image-20210823224944792.png" alt="image-20210823224944792"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823224944792.png"  alt="image-20210823224944792">
+      </p>
 <p>此时用户只具有一部分访问权限，如用户”<strong>zs</strong>“只能访问<code>main</code>页面，访问其他页面时将会出现提示”未授权，无法访问“</p>
-<p><img src="image-20210823225427764.png" alt="image-20210823225427764"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823225427764.png"  alt="image-20210823225427764">
+      </p>
 <p><strong>退出登录</strong></p>
 <p>在<code>index</code>页面可以点击“退出”来注销当前用户，此时关于该用户的session信息、认证信息、权限信息都将会移除，之后会重定向至<code>login</code>页面</p>
-<p><img src="image-20210823230025189.png" alt="image-20210823230025189"></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20210823230025189.png"  alt="image-20210823230025189">
+      </p>
 
         <h2 id="总结"   >
           <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
@@ -230,7 +269,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
           编写Web资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99controller%E7%B1%BB-UserController"><span class="toc-number">13.</span> <span class="toc-text">
           编写controller类-UserController</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E6%B5%8B%E8%AF%95"><span class="toc-number">14.</span> <span class="toc-text">
           开始测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">15.</span> <span class="toc-text">
-          总结</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/avatar.png" alt="avatar"></div><p class="sidebar-ov-author__text">Hi,cat-nyan</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">29</div><div class="sidebar-ov-state-item__name">归档</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Cat-nyan</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.min.js"></script><script>function initSearch() {
+          总结</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/avatar.png" alt="avatar"></div><p class="sidebar-ov-author__text">Hi,cat-nyan</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">30</div><div class="sidebar-ov-state-item__name">归档</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Cat-nyan</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.min.js"></script><script>function initSearch() {
   var isXML = true;
   var search_path = 'search.json';
 
