@@ -1,0 +1,722 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="概述       当你在运行一个Maven老项目时往往会出现各种错误而导致无法运行，本博文以一个老的Hadoop项目为例介绍无法运行的原因以及解决方案。                                                原项目链接rathboma的项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop老项目运行问题">
+<meta property="og:url" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="概述       当你在运行一个Maven老项目时往往会出现各种错误而导致无法运行，本博文以一个老的Hadoop项目为例介绍无法运行的原因以及解决方案。                                                原项目链接rathboma的项目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/2021108-1.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/2021108-2.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211009160328585.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010170602768.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010171233875.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010203633657.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010203937700.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010204203641.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010205144501.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010211059327.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010211309116.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010211610022.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010212753427.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010213539518.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211010213645038.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012194704785.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012195023527.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012195515829.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012200053982.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012200735650.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012201311513.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012201402871.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012202042420.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012203003157.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012203056265.png">
+<meta property="og:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/image-20211012203838566.png">
+<meta property="article:published_time" content="2021-10-08T02:39:43.000Z">
+<meta property="article:modified_time" content="2021-10-12T14:06:42.745Z">
+<meta property="article:author" content="Cat-nyan">
+<meta property="article:tag" content="Hadoop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/2021108-1.png"><title>Hadoop老项目运行问题 | Blog</title><link ref="canonical" href="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: true,
+  pjax: {"avoidBanner":true},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">Blog</div><div class="header-banner-info__subtitle"></div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Hadoop老项目运行问题</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-10-08</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-10-12</span></span></div></header><div class="post-body">
+        <h2 id="概述"   >
+          <a href="#概述" class="heading-link"><i class="fas fa-link"></i></a><a href="#概述" class="headerlink" title="概述"></a>概述</h2>
+      <p>当你在运行一个<em><strong>Maven</strong></em>老项目时往往会出现各种错误而导致无法运行，本博文以一个老的Hadoop项目为例介绍无法运行的原因以及解决方案。</p>
+
+    <div class="note-plugin info">
+      <span class="note-plugin__icon note-plugin__icon--info">
+              <i class="fas fa-info-circle"></i>
+            </span>
+      <p>原项目链接</p><p><a target="_blank" rel="noopener" href="https://github.com/rathboma/hadoop-framework-examples/tree/master/java-mapreduce"><em><strong>rathboma</strong></em>的项目</a></p>
+    </div>
+  
+
+<span id="more"></span>
+
+
+
+
+        <h2 id="错误原因"   >
+          <a href="#错误原因" class="heading-link"><i class="fas fa-link"></i></a><a href="#错误原因" class="headerlink" title="错误原因"></a>错误原因</h2>
+      
+        <h3 id="环境问题"   >
+          <a href="#环境问题" class="heading-link"><i class="fas fa-link"></i></a><a href="#环境问题" class="headerlink" title="环境问题"></a>环境问题</h3>
+      <p>老项目无法运行的很大一部分原因是环境问题，比如我的PC安装的<strong>java环境</strong>为JDK16（现在最高版本为<strong>JDK17</strong>），是具备运行运行java程序的能力的。</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="2021108-1.png"  alt="image-20211008110635985">
+      </p>
+<p>但是当我运行项目时，编辑器将会提示如下错误</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="2021108-2.png"  alt="image-20211008111220806">
+      </p>
+<p>看来还是缺少项目运行所需的必要jar包，从下图的项目结构中也可以看出jdk.tools-1.6.jar包处于丢失状态，没找到相应的路径，而这个包本应该是由java库来提供，但是我明明已经配置了java环境，却还是出错了，导致这一结果原因是：</p>
+
+    <div class="note-plugin warning">
+      <span class="note-plugin__icon note-plugin__icon--warning">
+              <i class="fas fa-exclamation-circle"></i>
+            </span>
+      <p>Java SE 9.0于2017年9月21日发布。JDK 9的核心变化就是引入了一种新的Java编程组件，也就是模块,按照Oracle的说法，它是一个可命名的、自描述的代码和数据集合。模块化所带来的其中一个变化包括从Java运行时镜像中移除了<strong>rt.jar</strong>和<strong>tools.jar</strong>。</p>
+    </div>
+  
+
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211009160328585.png"  alt="image-20211009160328585">
+      </p>
+<p>到这便可得出结论，我的<strong>JDK</strong>版本太高了</p>
+
+        <h3 id="依赖问题"   >
+          <a href="#依赖问题" class="heading-link"><i class="fas fa-link"></i></a><a href="#依赖问题" class="headerlink" title="依赖问题"></a>依赖问题</h3>
+      <p>当我在导入依赖时，<strong>Maven</strong>将会自动加载其所需的其他依赖包，但是不会总成功进行，就如上面的环境问题，本地环境根本就没有提供这个jar包，Maven是不可能凭空捏造的，只会提示找不到，所以这里有两个选项，要么降低<strong>JDK</strong>版本，要么使用其他依赖摆脱掉jdk.tool-1.6.jar，或者这个项目也可以通过升级依赖<code>hadoop-client</code>成<strong>3.3.1</strong>来解决这个问题。</p>
+
+        <h2 id="解决方案"   >
+          <a href="#解决方案" class="heading-link"><i class="fas fa-link"></i></a><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2>
+      
+    <div class="note-plugin success">
+      <span class="note-plugin__icon note-plugin__icon--success">
+              <i class="fas fa-check-circle"></i>
+            </span>
+      <p><strong>Tip</strong></p><p>如果你不想了解问题具体是怎么解决的，仅仅想<strong>快速上手</strong>让项目跑起来，那么你可以直接前往下面的<strong>项目运行</strong>部分</p>
+    </div>
+  
+
+
+        <h3 id="更换JDK版本"   >
+          <a href="#更换JDK版本" class="heading-link"><i class="fas fa-link"></i></a><a href="#更换JDK版本" class="headerlink" title="更换JDK版本"></a>更换JDK版本</h3>
+      <p>其实不太建议随意更换JDK版本，因为一旦更改，所有与JDK有关的应用和项目都要进行修改，包括IDEA或Eclipse的java编译器版本和项目文件指定的编译器版本，这些都要全部修改一遍，非常繁琐，如果实在想换，那么建议使用<strong>JDK8</strong>（别名jdk1.8），兼容性比较好。</p>
+
+    <div class="note-plugin info">
+      <span class="note-plugin__icon note-plugin__icon--info">
+              <i class="fas fa-info-circle"></i>
+            </span>
+      <p>这里提供了JDK8的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/downloads/#java8" >官方地址</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>，有需要的可以下载。</p>
+    </div>
+  
+
+
+        <h3 id="更新或更换依赖"   >
+          <a href="#更新或更换依赖" class="heading-link"><i class="fas fa-link"></i></a><a href="#更新或更换依赖" class="headerlink" title="更新或更换依赖"></a>更新或更换依赖</h3>
+      <p>出现报错的来自下面这个依赖</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0-mr1-cdh4.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>错误信息显示如下图，表明<code>hadoop-annotaions.jar</code>找不到<code>jdk.tools-1.6.jar</code></p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010170602768.png"  alt="image-20211010170602768">
+      </p>
+<p>考虑到这个项目发自2012年，<code>hadoop-client</code>的版本更新或许已经修复这个问题了，可以尝试一下这个方案。</p>
+<p>如下图所示，把<code>hadoop-client</code>升级成3.3.1后，这个问题已经被修复了</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010171233875.png"  alt="image-20211010171233875">
+      </p>
+<p>另外也可以不使用这个报错的依赖，改用其他依赖，如下面的依赖也可以解决这个问题，让项目得以运行。</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--hadoop--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-jobclient<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--log--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.logging.log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.12.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+
+
+        <h2 id="项目运行"   >
+          <a href="#项目运行" class="heading-link"><i class="fas fa-link"></i></a><a href="#项目运行" class="headerlink" title="项目运行"></a>项目运行</h2>
+      <p>对于大部分使用者都会把Hadoop安装在远程服务器上或者是虚拟机中，因此这里有两种运行方式</p>
+<ul>
+<li>远程运行：把项目上传至远程服务器或虚拟机中运行</li>
+<li>本地运行：通过在本地模拟出Hadoop的运行环境，可以让项目直接在Windows上运行</li>
+</ul>
+<p>两种方式各有优劣，前者能够较为简单的运行项目，但不方便调试，而后者可以更方便的对代码进行调试，但环境搭建较为复杂。</p>
+
+        <h3 id="远程运行"   >
+          <a href="#远程运行" class="heading-link"><i class="fas fa-link"></i></a><a href="#远程运行" class="headerlink" title="远程运行"></a>远程运行</h3>
+      
+    <div class="note-plugin success">
+      <span class="note-plugin__icon note-plugin__icon--success">
+              <i class="fas fa-check-circle"></i>
+            </span>
+      <p><strong>准备工作</strong></p><p>在运行项目之前，必须具备以下条件（版本可自行选择）</p><ul><li>JDK1.8已安装</li><li>Hadoop3.2.2集群已搭建好</li><li>Maven3.8.3已安装</li></ul>
+    </div>
+  
+
+<p>如果以上环境没有准备完整，请搜索相关教程配置完毕后在进行下面步骤。</p>
+<p><strong>项目调整</strong></p>
+<p>把项目从Github上下载下来，然后需要对其中的内容进行更改，以适配上边准备好的环境。</p>
+<p>使用IDEA或Eclipse打开项目（当然你也可以在服务器上对项目进行操作，如果你不嫌麻烦的话），删除<strong>src</strong>目录下的<strong>测试用</strong>文件夹<strong>test</strong>，以及<strong>pom.xml</strong>文件中与测试有关的所有依赖<code>TEST DEPENDENCIES</code>，需要删除的部分见下图</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010203633657.png"  alt="image-20211010203633657">
+      </p>
+<p>删除完成后对应的项目目录结构即项目依赖见下图</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010203937700.png"  alt="image-20211010203937700">
+      </p>
+<p>将<strong>pom.xml</strong>文件中的<code>hadoop-client</code>依赖升级至<strong>3.3.1</strong>，同时把<code>&lt; scope&gt;provided&lt; /scope&gt;</code>字段删除</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010204203641.png"  alt="image-20211010204203641">
+      </p>
+<p>进入<strong>RawMapreduce</strong>这个类，在<code>main</code>函数中，修改四个路径的参数如下图，其中前两个路径需要你自己去创建，并把输入文件放在相应目录中，如文件<code>transactions.txt</code>应该放在<code>/user/path/transactions/</code>目录中，而文件<code>users.txt</code>应该放在<code>/user/path/users/</code>目录中，而最后两个路径<code>/user/path/staging</code>和<code>/user/path/output</code>不需要你创建，Hadoop将会自动生成，你也可以创建其他的目录，但是这四个Path也需要做相应的修改。</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010205144501.png"  alt="image-20211010205144501">
+      </p>
+
+    <div class="note-plugin info">
+      <span class="note-plugin__icon note-plugin__icon--info">
+              <i class="fas fa-info-circle"></i>
+            </span>
+      <p>如果你不知道如何在HDFS中创建目录、上传文件，那么你需要学习一下<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.w3cschool.cn/hadoop/hadoop_hdfs_operations.html" >HDFS操作</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+    </div>
+  
+
+<blockquote>
+<p>你也可以不设置四个Path的参数，仅在执行项目时手动输入参数，不过我相信你试过几次后就会放弃这样做。</p>
+</blockquote>
+<p>至此项目已经修改完毕，将修改后的项目上传至远程服务器或虚拟机中，之后进入该项目的根目录，然后执行<code> mvn package assembly:single</code>命令对项目进行打包</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010211059327.png"  alt="image-20211010211059327">
+      </p>
+<p>依赖下载可能会花费一点时间，打包完成之后将会在当前目录产生<code>target</code>目录，之后进入<code>target</code>目录</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010211309116.png"  alt="image-20211010211309116">
+      </p>
+<p>在<code>target</code>目录中可以看到有两个<strong>jar</strong>包，只有带有依赖的<strong>jar</strong>包才能运行</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010211610022.png"  alt="image-20211010211610022">
+      </p>
+<p>在启动项目之前，你需要先执行以下命令来分别启动HDFS和YARN，前者是Hadoop文件管理系统，后者是Hadoop的资源管理器</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@master:/home/java-mapreduce/target<span class="comment"># start.dfs.sh</span></span><br><span class="line">root@master:/home/java-mapreduce/target<span class="comment"># start.yarn.sh</span></span><br></pre></td></tr></table></div></figure>
+
+<p>启动后执行<code>jps</code>命令应该会看到如下结果</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@master:/home/java-mapreduce/target<span class="comment"># jps</span></span><br><span class="line">91537 NameNode</span><br><span class="line">13921 DataNode</span><br><span class="line">92005 SecondaryNameNode</span><br><span class="line">103382 Jps</span><br><span class="line">99224 NodeManager</span><br><span class="line">98956 ResourceManager</span><br><span class="line">root@master:/home/java-mapreduce/target<span class="comment">#</span></span><br></pre></td></tr></table></div></figure>
+
+<p>到这你就可以执行刚才打包得到的<strong>jar</strong>包了，执行以下命令启动项目</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@master:/home/java-mapreduce/target<span class="comment"># hadoop jar java-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar</span></span><br></pre></td></tr></table></div></figure>
+
+<p>如果启动没有报错，执行结果见下图</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010212753427.png"  alt="image-20211010212753427">
+      </p>
+<p>这时你已经可以在浏览器中前往<code>master:9870</code>这个地址查看输出的文件，可直接下载至本地。</p>
+
+    <div class="note-plugin info">
+      <span class="note-plugin__icon note-plugin__icon--info">
+              <i class="fas fa-info-circle"></i>
+            </span>
+      <p><strong>master</strong>是我搭建的Hadoop名称节点的<strong>主机名</strong>，如果你想在Windows上访问<code>master:9870</code>，你需要把<code>C:\Windows\System32\drivers\etc\</code>路径下的hosts文件末尾中添加<code>远程服务器ip 主机名</code>，也可以直接把<strong>master</strong>替换成IP地址，IP地址可通过ifconfig查看。</p>
+    </div>
+  
+
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010213539518.png"  alt="image-20211010213539518">
+      </p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211010213645038.png"  alt="image-20211010213645038">
+      </p>
+
+        <h3 id="本地运行"   >
+          <a href="#本地运行" class="heading-link"><i class="fas fa-link"></i></a><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h3>
+      
+    <div class="note-plugin success">
+      <span class="note-plugin__icon note-plugin__icon--success">
+              <i class="fas fa-check-circle"></i>
+            </span>
+      <p><strong>准备工作</strong></p><ul><li>JDK1.8已安装（远程服务器或虚拟机）</li><li>Hadoop3.2.2集群已搭建好（远程服务器或虚拟机）</li><li>JDK16已安装（本地Windows）</li><li>Maven3.8.2已安装（本地Windows）</li></ul>
+    </div>
+  
+
+<p>在以上环境配置完成后，还需要在Windows上额外安装winutils来虚拟出Hadoop的运行环境。</p>
+<p><strong>Winutils</strong></p>
+
+    <div class="note-plugin info">
+      <span class="note-plugin__icon note-plugin__icon--info">
+              <i class="fas fa-info-circle"></i>
+            </span>
+      <p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/cdarlint/winutils" >Github下载地址</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+    </div>
+  
+
+<p>如下图winutils有许多版本可供选择，请选择一个最接近你Hadoop版本的选项下载，如我的远程服务器上的Hadoop版本为3.2.2，那么我下载了winutils的3.2.2版本。</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012194704785.png"  alt="image-20211012194704785">
+      </p>
+<p>下载后放置在你能找到的路径下，然后配置环境变量，新建环境变量，变量名为<code>HADOOP_HOME</code>，路径为你下载的文件夹存放的位置，之后在<strong>Path</strong>中添加环境变量,如下图</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012195023527.png"  alt="image-20211012195023527">
+      </p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012195515829.png"  alt="image-20211012195515829">
+      </p>
+<p><strong>更改Hosts</strong></p>
+<p>如果你想通过主机名直接访问远程服务器，需要在<code>C:\Windows\System32\drivers\etc\</code>这个路径下的hosts文件末尾添加<code>远程服务器ip 主机名</code>，这条语句的作用是把服务器的主机名映射成ip地址，可以方便后续访问</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012200053982.png"  alt="image-20211012200053982">
+      </p>
+<p><strong>项目调整</strong></p>
+<p>使用IDEA或Eclipse打开项目，删除<strong>src</strong>目录下的<strong>测试用</strong>文件夹<strong>test</strong>，删除<strong>pom.xml</strong>文件中与测试有关的所有依赖<code>TEST DEPENDENCIES</code>，并且升级<code>hadoop-client</code>依赖至3.3.1版本，额外还需添加<code>slf4j-log4j12</code>依赖，最终结果见下图</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012200735650.png"  alt="image-20211012200735650">
+      </p>
+<p>为了让项目运行时把日志输出在控制台上，需要在<strong>src</strong>目录下创建<strong>resources</strong>目录，并添加<code>log4j.properties</code>文件，该文件可以从服务器的<strong>Hadoop</strong>安装文件中找到</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012201311513.png"  alt="image-20211012201311513">
+      </p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012201402871.png"  alt="image-20211012201402871">
+      </p>
+<p>进入<strong>RawMapreduce</strong>这个类，在<code>main</code>函数中，修改四个路径的参数如下图，其中前两个路径需要你自己服务器上创建，并把输入文件放在相应目录中，如文件<code>transactions.txt</code>应该放在<code>/user/path/transactions/</code>目录中，而文件<code>users.txt</code>应该放在<code>/user/path/users/</code>目录中，而最后两个路径<code>/user/path/staging</code>和<code>/user/path/output</code>不需要你创建，Hadoop将会自动生成，你也可以创建其他的目录，但是这四个Path也需要做相应的修改。</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012202042420.png"  alt="image-20211012202042420">
+      </p>
+<p>这里的参数和<strong>远程运行</strong>有些许不同，是因为本地的机器并不知道<strong>Hadoop</strong>资源文件的具体位置，因此需要手动指明ip地址和端口号，而前面已经对主机号和ip地址之间进行了映射处理，这里就可以直接使用主机名了。</p>
+
+    <div class="note-plugin info">
+      <span class="note-plugin__icon note-plugin__icon--info">
+              <i class="fas fa-info-circle"></i>
+            </span>
+      <p>同样的，如果你不知道如何在HDFS中创建目录、上传文件，那么你需要学习一下<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.w3cschool.cn/hadoop/hadoop_hdfs_operations.html" >HDFS操作</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+    </div>
+  
+
+<p>由于我的JDK版本过高，出现了<code>错误: 不支持发行版本 5</code>的问题，可以在<strong>pom.xml</strong>文件中指定编译版本</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012203003157.png"  alt="image-20211012203018192">
+      </p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012203056265.png"  alt="image-20211012203056265">
+      </p>
+<p><strong>项目运行</strong></p>
+<p>在运行项目前，需要先执行以下命令来启动远程服务器上的<strong>HDFS</strong></p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@master:/home/java-mapreduce/target<span class="comment"># start.dfs.sh</span></span><br></pre></td></tr></table></div></figure>
+
+<p>启动后执行<code>jps</code>命令应该会看到如下结果</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@master:/opt/hadoop-3.2.2/etc/hadoop<span class="comment"># jps</span></span><br><span class="line">155603 NameNode</span><br><span class="line">13921 DataNode</span><br><span class="line">156100 SecondaryNameNode</span><br><span class="line">161208 Jps</span><br><span class="line">root@master:/opt/hadoop-3.2.2/etc/hadoop<span class="comment">#</span></span><br></pre></td></tr></table></div></figure>
+
+<p>到这你就可以在IDEA或Eclipse上启动项目了，如果成功运行，将会看到如下日志</p>
+<p>
+        <img   class="lazyload lazyload-gif"
+          src="/images/loading.svg" data-src="image-20211012203838566.png"  alt="image-20211012203838566">
+      </p>
+<p>这时你已经可以在浏览器中前往<code>master:9870</code>这个地址查看输出的文件，可直接下载至本地。</p>
+
+        <h2 id="完整项目文件"   >
+          <a href="#完整项目文件" class="heading-link"><i class="fas fa-link"></i></a><a href="#完整项目文件" class="headerlink" title="完整项目文件"></a>完整项目文件</h2>
+      <p>下面提供了完整的项目文件，如果项目调整遇到问题可以下载以供参考</p>
+
+    <div class="note-plugin success">
+      <span class="note-plugin__icon note-plugin__icon--success">
+              <i class="fas fa-check-circle"></i>
+            </span>
+      <p><strong>Github</strong></p><p><span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/Cat-nyan/old-hadoop-project" >完整项目文件</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+    </div>
+  
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://cat-nyan.github.io">Cat-nyan</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/">https://cat-nyan.github.io/2021/10/08/run-hadoop-old-project/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://cat-nyan.github.io/tags/Hadoop/">Hadoop</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/09/06/jvm-bytecode-execution-engine/"><span class="paginator-prev__text">JVM-字节码执行引擎</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">
+          概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.</span> <span class="toc-text">
+          错误原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text">
+          环境问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.</span> <span class="toc-text">
+          依赖问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">3.</span> <span class="toc-text">
+          解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%8D%A2JDK%E7%89%88%E6%9C%AC"><span class="toc-number">3.1.</span> <span class="toc-text">
+          更换JDK版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%88%96%E6%9B%B4%E6%8D%A2%E4%BE%9D%E8%B5%96"><span class="toc-number">3.2.</span> <span class="toc-text">
+          更新或更换依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E8%BF%90%E8%A1%8C"><span class="toc-number">4.</span> <span class="toc-text">
+          项目运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8C"><span class="toc-number">4.1.</span> <span class="toc-text">
+          远程运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C"><span class="toc-number">4.2.</span> <span class="toc-text">
+          本地运行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">
+          完整项目文件</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/avatar.png" alt="avatar"></div><p class="sidebar-ov-author__text">Hi,cat-nyan</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">31</div><div class="sidebar-ov-state-item__name">归档</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Cat-nyan</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
